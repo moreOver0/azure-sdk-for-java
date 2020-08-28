@@ -98,16 +98,15 @@ public final class DigitalTwinsAsyncClient {
         return protocolLayer
             .getDigitalTwins()
             .addWithResponseAsync(digitalTwinId, digitalTwin, context)
-            .flatMap(
-                response -> {
-                    try {
-                        String jsonResponse = mapper.writeValueAsString(response.getValue());
-                        DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
-                        return Mono.just(new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), jsonResponse, twinHeaders));
-                    } catch (JsonProcessingException e) {
-                        return Mono.error(e);
-                    }
-                });
+            .flatMap(response -> {
+                try {
+                    String jsonResponse = mapper.writeValueAsString(response.getValue());
+                    DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
+                    return Mono.just(new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), jsonResponse, twinHeaders));
+                } catch (JsonProcessingException e) {
+                    return Mono.error(e);
+                }
+            });
     }
 
     // TODO: This is a temporary implementation for sample purposes. This should be spruced up/replaced once this API is actually designed.
@@ -121,12 +120,11 @@ public final class DigitalTwinsAsyncClient {
         return protocolLayer
             .getDigitalTwins()
             .addWithResponseAsync(digitalTwinId, digitalTwin, context)
-            .flatMap(
-                response -> {
-                    T genericResponse = mapper.convertValue(response.getValue(), clazz);
-                    DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
-                    return Mono.just(new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), genericResponse, twinHeaders));
-                });
+            .map(response -> {
+                T genericResponse = mapper.convertValue(response.getValue(), clazz);
+                DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
+                return new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), genericResponse, twinHeaders);
+            });
     }
 
     /**
@@ -140,7 +138,7 @@ public final class DigitalTwinsAsyncClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<String> createRelationship(String digitalTwinId, String relationshipId, String relationship) {
         return withContext(context -> createRelationship(digitalTwinId, relationshipId, relationship, context))
-            .flatMap(response -> Mono.just(response.getValue()));
+            .map(DigitalTwinsResponse::getValue);
     }
 
     /**
@@ -160,16 +158,15 @@ public final class DigitalTwinsAsyncClient {
         return protocolLayer
             .getDigitalTwins()
             .addRelationshipWithResponseAsync(digitalTwinId, relationshipId, relationship, context)
-            .flatMap(
-                response -> {
-                    try {
-                        String jsonResponse = mapper.writeValueAsString(response.getValue());
-                        DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
-                        return Mono.just(new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), jsonResponse, twinHeaders));
-                    } catch (JsonProcessingException e) {
-                        return Mono.error(e);
-                    }
-                });
+            .flatMap(response -> {
+                try {
+                    String jsonResponse = mapper.writeValueAsString(response.getValue());
+                    DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
+                    return Mono.just(new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), jsonResponse, twinHeaders));
+                } catch (JsonProcessingException e) {
+                    return Mono.error(e);
+                }
+            });
     }
 
     /**
@@ -185,7 +182,7 @@ public final class DigitalTwinsAsyncClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public <T> Mono<T> createRelationship(String digitalTwinId, String relationshipId, Object relationship, Class<T> clazz) {
         return withContext(context -> createRelationship(digitalTwinId, relationshipId, relationship, clazz, context))
-            .flatMap(response -> Mono.just(response.getValue()));
+            .map(DigitalTwinsResponse::getValue);
     }
 
     /**
@@ -207,12 +204,11 @@ public final class DigitalTwinsAsyncClient {
         return protocolLayer
             .getDigitalTwins()
             .addRelationshipWithResponseAsync(digitalTwinId, relationshipId, relationship, context)
-            .flatMap(
-                response -> {
-                    T genericResponse = mapper.convertValue(response.getValue(), clazz);
-                    DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
-                    return Mono.just(new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), genericResponse, twinHeaders));
-                });
+            .map(response -> {
+                T genericResponse = mapper.convertValue(response.getValue(), clazz);
+                DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
+                return new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), genericResponse, twinHeaders);
+            });
     }
 
     /**
@@ -225,7 +221,7 @@ public final class DigitalTwinsAsyncClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<String> getRelationship(String digitalTwinId, String relationshipId) {
         return withContext(context -> getRelationship(digitalTwinId, relationshipId, context))
-            .flatMap(response -> Mono.justOrEmpty(response.getValue()));
+            .map(DigitalTwinsResponse::getValue);
     }
 
     /**
@@ -244,16 +240,15 @@ public final class DigitalTwinsAsyncClient {
         return protocolLayer
             .getDigitalTwins()
             .getRelationshipByIdWithResponseAsync(digitalTwinId, relationshipId, context)
-            .flatMap(
-                response -> {
-                    try {
-                        String jsonResponse = mapper.writeValueAsString(response.getValue());
-                        DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
-                        return Mono.justOrEmpty(new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), jsonResponse, twinHeaders));
-                    } catch (JsonProcessingException e) {
-                        return Mono.error(e);
-                    }
-                });
+            .flatMap(response -> {
+                try {
+                    String jsonResponse = mapper.writeValueAsString(response.getValue());
+                    DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
+                    return Mono.justOrEmpty(new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), jsonResponse, twinHeaders));
+                } catch (JsonProcessingException e) {
+                    return Mono.error(e);
+                }
+            });
     }
 
     /**
@@ -268,7 +263,7 @@ public final class DigitalTwinsAsyncClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public <T> Mono<T> getRelationship(String digitalTwinId, String relationshipId, Class<T> clazz) {
         return withContext(context -> getRelationship(digitalTwinId, relationshipId, clazz, context))
-            .flatMap(response -> Mono.justOrEmpty(response.getValue()));
+            .map(DigitalTwinsResponse::getValue);
     }
 
     /**
@@ -289,12 +284,11 @@ public final class DigitalTwinsAsyncClient {
         return protocolLayer
             .getDigitalTwins()
             .getRelationshipByIdWithResponseAsync(digitalTwinId, relationshipId, context)
-            .flatMap(
-                response -> {
-                    T genericResponse = mapper.convertValue(response.getValue(), clazz);
-                    DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
-                    return Mono.justOrEmpty(new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), genericResponse, twinHeaders));
-                });
+            .map(response -> {
+                T genericResponse = mapper.convertValue(response.getValue(), clazz);
+                DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
+                return new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), genericResponse, twinHeaders);
+            });
     }
 
     /**
@@ -329,11 +323,10 @@ public final class DigitalTwinsAsyncClient {
         return protocolLayer
             .getDigitalTwins()
             .updateRelationshipWithResponseAsync(digitalTwinId, relationshipId, options.getIfMatch(), relationshipUpdateOperations, context)
-            .flatMap(
-                response -> {
-                    DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
-                    return Mono.justOrEmpty(new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), response.getValue(), twinHeaders));
-                });
+            .map(response -> {
+                DigitalTwinsResponseHeaders twinHeaders = mapper.convertValue(response.getDeserializedHeaders(), DigitalTwinsResponseHeaders.class);
+                return new DigitalTwinsResponse<>(response.getRequest(), response.getStatusCode(), response.getHeaders(), response.getValue(), twinHeaders);
+            });
     }
 
     /**
