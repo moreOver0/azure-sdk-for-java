@@ -524,7 +524,6 @@ public final class DigitalTwinsAsyncClient {
             nextLink -> listRelationshipsNextPage(nextLink, clazz, context));
     }
 
-
     /**
      * Gets all the relationships referencing a digital twin as a target by iterating through a collection.
      *
