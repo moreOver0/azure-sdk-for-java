@@ -177,7 +177,7 @@ public final class DigitalTwinsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void updateRelationship(String digitalTwinId, String relationshipId, List<Object> relationshipUpdateOperations) {
-        updateRelationshipWithResponse(digitalTwinId, relationshipId, relationshipUpdateOperations, new RequestOptions(), Context.NONE).getValue();
+        updateRelationshipWithResponse(digitalTwinId, relationshipId, relationshipUpdateOperations, new RequestOptions(), Context.NONE);
     }
 
     /**

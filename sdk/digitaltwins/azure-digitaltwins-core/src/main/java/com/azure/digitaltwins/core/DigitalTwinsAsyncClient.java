@@ -394,7 +394,9 @@ public final class DigitalTwinsAsyncClient {
     }
 
     Mono<PagedResponse<String>> listRelationshipsFirstPage(String digitalTwinId, String relationshipName, Context context) {
-        return protocolLayer.getDigitalTwins().listRelationshipsSinglePageAsync(digitalTwinId, relationshipName, context)
+        return protocolLayer
+            .getDigitalTwins()
+            .listRelationshipsSinglePageAsync(digitalTwinId, relationshipName, context)
             .map(
                 objectPagedResponse -> {
                     List<String> stringList = objectPagedResponse.getValue().stream()
@@ -420,7 +422,9 @@ public final class DigitalTwinsAsyncClient {
     }
 
     Mono<PagedResponse<String>> listRelationshipsNextPage(String nextLink, Context context) {
-        return protocolLayer.getDigitalTwins().listRelationshipsNextSinglePageAsync(nextLink, context)
+        return protocolLayer
+            .getDigitalTwins()
+            .listRelationshipsNextSinglePageAsync(nextLink, context)
             .map(objectPagedResponse -> {
                 List<String> stringList = objectPagedResponse.getValue().stream()
                     .map(object -> {
