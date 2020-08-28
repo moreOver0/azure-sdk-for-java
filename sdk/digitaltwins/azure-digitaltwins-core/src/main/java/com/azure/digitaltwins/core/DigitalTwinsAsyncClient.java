@@ -402,8 +402,7 @@ public final class DigitalTwinsAsyncClient {
                             try {
                                 return mapper.writeValueAsString(object);
                             } catch (JsonProcessingException e) {
-                                logger.error("Could not parse the returned relationship [%s]: %s", object, e);
-                                return null;
+                                throw new RuntimeException("JsonProcessingException occurred while retrieving relationships", e);
                             }
                         })
                         .filter(Objects::nonNull)
@@ -428,8 +427,7 @@ public final class DigitalTwinsAsyncClient {
                         try {
                             return mapper.writeValueAsString(object);
                         } catch (JsonProcessingException e) {
-                            logger.error("Could not parse the returned relationship [%s]: %s", object, e);
-                            return null;
+                            throw new RuntimeException("JsonProcessingException occurred while retrieving relationships", e);
                         }
                     })
                     .filter(Objects::nonNull)
