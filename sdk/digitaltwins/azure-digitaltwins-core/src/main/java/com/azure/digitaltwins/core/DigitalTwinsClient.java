@@ -90,6 +90,7 @@ public final class DigitalTwinsClient {
      * @param relationshipId The Id of the relationship to be created.
      * @param relationship The relationship to be created.
      * @param clazz The model class to convert the relationship to.
+     * @param <T> The generic type to convert the relationship to.
      * @return The relationship created.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -104,6 +105,7 @@ public final class DigitalTwinsClient {
      * @param relationshipId The Id of the relationship to be created.
      * @param relationship The relationship to be created.
      * @param clazz The model class to convert the relationship to.
+     * @param <T> The generic type to convert the relationship to.
      * @param context Additional context that is passed through the Http pipeline during the service call.
      * @return A REST response containing the relationship created.
      */
@@ -143,6 +145,7 @@ public final class DigitalTwinsClient {
      * @param digitalTwinId The Id of the source digital twin.
      * @param relationshipId The Id of the relationship to retrieve.
      * @param clazz The model class to convert the relationship to.
+     * @param <T> The generic type to convert the relationship to.
      * @return The relationship corresponding to the provided relationshipId.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -156,6 +159,7 @@ public final class DigitalTwinsClient {
      * @param digitalTwinId The Id of the source digital twin.
      * @param relationshipId The Id of the relationship to retrieve.
      * @param clazz The model class to convert the relationship to.
+     * @param <T> The generic type to convert the relationship to.
      * @param context Additional context that is passed through the Http pipeline during the service call.
      * @return A REST response containing the relationship corresponding to the provided relationshipId.
      */
@@ -244,7 +248,8 @@ public final class DigitalTwinsClient {
      * Gets all the relationships on a digital twin by iterating through a collection.
      *
      * @param digitalTwinId The Id of the source digital twin.
-     * @param clazz The model class to convert the relationship to. Since a digital twin might have relationships conforming to different models, it is advisable to convert them to a generic model.
+     * @param clazz The model class to convert the relationship to. Since a digital twin might have relationships conforming to different models, it is advisable to convert them to a generic model like {@link com.azure.digitaltwins.core.implementation.serialization.BasicRelationship}.
+     * @param <T> The generic type to convert the relationship to.
      * @return A {@link PagedIterable} of relationships belonging to the specified digital twin and the http response.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
@@ -258,6 +263,7 @@ public final class DigitalTwinsClient {
      * @param digitalTwinId The Id of the source digital twin.
      * @param relationshipName The name of a relationship to filter to.
      * @param clazz The model class to convert the relationship to.
+     * @param <T> The generic type to convert the relationship to.
      * @param context Additional context that is passed through the Http pipeline during the service call.
      * @return A {@link PagedIterable} of relationships belonging to the specified digital twin and the http response.
      */
